@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+  dc_node:
+    container_name: dc_node
+    image: 
+    ports:
+      - "9091:9091"
+    networks:
+      - dc_network
+    depends_on:
+      - dc_mongo
+    restart: always
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - PORT=${PORT}
+      - Register_Key=${Register_Key}
+  dc_mongo:
+    container_name: dc_mongo
+    image: mongo:latest
+    expose:
+      - "27017"
+    volumes:
+      - drawing-captcha:/data/db
+    networks:
+      - dc_network
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+networks:
+  dc_network:
+volumes:
+  drawing-captcha:
