@@ -13,7 +13,10 @@ services:
     environment:
       - MONGO_URI=${MONGO_URI}
       - PORT=${PORT}
+      - SERVER_DOMAIN=${SERVER_DOMAIN}
       - Register_Key=${Register_Key}
+      - DC_ADMIN_EMAIL=${DC_ADMIN_EMAIL}
+      - DC_ADMIN_PASSWORD=${DC_ADMIN_PASSWORD}
   dc_mongo:
     container_name: dc_mongo
     image: mongo:latest
@@ -28,7 +31,9 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+
 networks:
   dc_network:
+
 volumes:
   drawing-captcha:

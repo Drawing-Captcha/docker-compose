@@ -1,150 +1,119 @@
-<h1 align="center" id="title">Drawing Captcha App Docker Compose</h1>
+# 🎨 Drawing Captcha App Deployment Guide with Docker 🐳
 
-<p align="center">
-<img src="https://wpesicdev.github.io/Drawing-Captcha-Demo-Alpha/assets/shots%20(2).png" alt="project-image">
-</p>
+This guide describes how to install and run the Drawing Captcha App using Docker Compose on your server.
 
-## Description
+## Prerequisites 📋
 
-Drawing Captcha is an innovative and engaging software designed to verify human users through interactive drawing tasks. 🖌️ Users are prompted to complete specific patterns or color in logos on a grid, ensuring a secure 🔒 and enjoyable 😊 verification process. This unique approach not only enhances security but also promotes brand awareness by incorporating recognizable brand elements into the captchas.
+- Docker installed: [Docker Installation Guide](https://docs.docker.com/get-docker/)
+- Docker Compose installed: [Docker Compose Installation Guide](https://docs.docker.com/compose/install/)
 
-With Drawing Captcha, you can easily create, modify, and design your own captchas to suit your specific needs. 🛠️ The user-friendly interface allows for a seamless experience, making it accessible to users of all skill levels. Whether you want to enhance security, boost brand recognition, or simply provide a fun user interaction, Drawing Captcha is the perfect solution. 🎨
+## Docker Compose Setup 🐳
 
-## 🧐 Features
+Create a file named `docker-compose.yml` with the following content:
 
-Here are some of the project's best features:
+```yaml
+version: "3.8"
 
-- RBAC
-- Captcha Settings
-- API Functionality
-- Origins Management
-- Captcha Management
-- CORS Protection
-- Everything stored in MongoDB
-- User Management
-- Organization Management
-- EASY IMPLEMENTATION!
-
-## 🛠️ Installation Steps
-
-### Docker-Compose with dockerhub Image
-
-1. Clone this project:
-   ```sh
-   git clone https://github.com/Drawing-Captcha/docker-compose
-   ```
-2. Create and change your `.env` settings:
-
-<p>I have added a `.env.example`. You can just rename this file to `.env`.</p>
-
-   ```env
-   MONGO_INITDB_ROOT_USERNAME=root
-   MONGO_INITDB_ROOT_PASSWORD=rootTest
-   MONGO_INITDB_DATABASE=drawing-captcha
-
-   # For local development
-   # MONGO_URI="mongodb://localhost:7500/drawing-captcha"
-   # For deployment
-   MONGO_URI="mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@dc_mongo:27017/${MONGO_INITDB_DATABASE}?authSource=admin"
-
-   # Enter here your domain where you want to host your Drawing Captcha. Important: enter it with http/https
-   SERVER_DOMAIN="https://yourdomain.com"
-
-   # Port of your server
-   PORT=9091
-
-   # This will automatically be reset:
-   REGISTER_KEY="&&+%&%ajkhdjhWIIWNw7>dajh2gg"
-
-   # Change this email!!
-   DC_ADMIN_EMAIL="your@mail.com"
-
-   # Change this password!!!
-   DC_ADMIN_PASSWORD="admin"
-   ```
-
-Please note to change these variables:
-- MONGO_INITDB_ROOT_USERNAME
-- MONGO_INITDB_ROOT_PASSWORD
-- SERVER_DOMAIN (if you want to host it somewhere)
-- DC_ADMIN_EMAIL
-- DC_ADMIN_PASSWORD
-
-3. Final steps:
-
-    ```yml
-    version: "3.8"
-    services:
-    dc_node:
-        container_name: dc_node
-        image: 
-        ports:
-        - "9091:9091"
-        networks:
-        - dc_network
-        depends_on:
-        - dc_mongo
-        restart: always
-        environment:
-        - MONGO_URI=${MONGO_URI}
-        - PORT=${PORT}
-        - Register_Key=${Register_Key}
-    dc_mongo:
-        container_name: dc_mongo
-        image: mongo:latest
-        expose:
-        - "27017"
-        volumes:
-        - drawing-captcha:/data/db
-        networks:
-        - dc_network
-        restart: always
-        environment:
-        MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-        MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-        MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+services:
+  dc_node:
+    container_name: dc_node
+    image: williamspesic/drawing-captcha-app:latest
+    ports:
+      - "9091:9091"
     networks:
-    dc_network:
+      - dc_network
+    depends_on:
+      - dc_mongo
+    restart: always
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - PORT=${PORT}
+      - SERVER_DOMAIN=${SERVER_DOMAIN}
+      - REGISTER_KEY=${REGISTER_KEY}
+      - DC_ADMIN_EMAIL=${DC_ADMIN_EMAIL}
+      - DC_ADMIN_PASSWORD=${DC_ADMIN_PASSWORD}
+  dc_mongo:
+    container_name: dc_mongo
+    image: mongo:latest
+    expose:
+      - "27017"
     volumes:
-    drawing-captcha:
-    ```
-    ```sh
-     docker-compose up --build -d
-    ```
+      - drawing-captcha:/data/db
+    networks:
+      - dc_network
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
 
-<p>If you haven't changed the default port, it should be working on http://localhost:9091.</p>
+networks:
+  dc_network:
 
-## 🍰 Contribution Guidelines
+volumes:
+  drawing-captcha:
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+```
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thanks again!
+## Environment Variables 🌍
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a pull request
+Create a  `.env`  file in the same directory and add the following content:
+```env
+MONGO_INITDB_ROOT_USERNAME=root
+MONGO_INITDB_ROOT_PASSWORD=zTU?e5ko798u0$s?3iY4^eUZvv.
+MONGO_INITDB_DATABASE=drawing-captcha
+```
 
-## 💻 Built with
+# For local development
+```emv
+MONGO_URI="mongodb://localhost:7500/drawing-captcha"
+```
+# For deployment
+```env
+MONGO_URI="mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@dc_mongo:27017/${MONGO_INITDB_DATABASE}?authSource=admin"
+```
+# Enter your domain where you want to host your Drawing Captcha. Important: include http/https
+```env
+SERVER_DOMAIN="https://yourdomain.com"
+# Port of your server
+PORT=9091
+```
+# This will automatically be reset:
+```env
+REGISTER_KEY="&&+%&%ajkhdjhWIIWNw7>dajh2gg"
+```
+# Change this email!!
+```env
+DC_ADMIN_EMAIL="your@mail.com"
+```
+# Change this password!!!
+```env
+DC_ADMIN_PASSWORD="admin"` 
+```
+## Starting the Application 🚀
 
-Technologies used in the project:
+1.  Navigate to the directory containing the  `docker-compose.yml`  file.
+    
+2.  Run the following command to start the containers:
+    
+    `docker-compose up -d` 
+    
+3.  The application should now be accessible at  `http://localhost:9091`  (or your specified domain).
+    
 
-- Node JS
-- Docker
-- EJS
-- HTML
-- CSS
-- JavaScript
+## Notes 📝
 
-## 💖 Like my work?
-Buy me a coffee: https://www.buymeacoffee.com/williamspe8
+-   Ensure you change the email and password in the  `.env`  file before deploying the app in a production environment.
+    
+-   Check Docker logs if issues arise:
+    
+    `docker-compose logs` 
+    
 
+## Troubleshooting 🛠️
 
-## License
+-   **MongoDB Connection Issues**: Check the  `MONGO_URI`  in the  `.env`  file.
+-   **Network Issues**: Ensure the  `dc_network`  is correctly configured.
 
-Distributed under the MIT License. See [MIT License](https://opensource.org/licenses/MIT) for more information.
-
-## Contact
-
-- info@wpesic.dev
+For further questions or issues, please visit the  [GitHub Repository](https://github.com/Drawing-Captcha/Drawing-Captcha-APP)  for more information.
+>>>>>>> master
