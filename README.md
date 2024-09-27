@@ -116,4 +116,3 @@ DC_ADMIN_PASSWORD="admin"`
 -   **Network Issues**: Ensure the  `dc_network`  is correctly configured.
 
 For further questions or issues, please visit the  [GitHub Repository](https://github.com/Drawing-Captcha/Drawing-Captcha-APP)  for more information.
->>>>>>> master
