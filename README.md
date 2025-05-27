@@ -13,25 +13,39 @@ Create a file named `docker-compose.yml` with the following content:
 
 ```yaml
 version: "3.8"
-
 services:
   dc_node:
     container_name: dc_node
     image: williamspesic/drawing-captcha-app:latest
     ports:
-      - "9091:9091"
+      - 9091:9091
     networks:
       - dc_network
+      - nginx_default
     depends_on:
       - dc_mongo
     restart: always
     environment:
-      - MONGO_URI=${MONGO_URI}
-      - PORT=${PORT}
-      - SERVER_DOMAIN=${SERVER_DOMAIN}
-      - REGISTER_KEY=${REGISTER_KEY}
-      - DC_ADMIN_EMAIL=${DC_ADMIN_EMAIL}
-      - DC_ADMIN_PASSWORD=${DC_ADMIN_PASSWORD}
+      MONGO_URI: ${MONGO_URI}
+      PORT: ${PORT}
+      SERVER_DOMAIN: ${SERVER_DOMAIN}
+      REGISTER_KEY: ${REGISTER_KEY}
+      DC_ADMIN_EMAIL: ${DC_ADMIN_EMAIL}
+      DC_ADMIN_PASSWORD: ${DC_ADMIN_PASSWORD}
+      EMAIL_SERVICE: ${EMAIL_SERVICE}
+      EMAIL_FROM: ${EMAIL_FROM}
+      SMTPAUTH_EMAIL_HOST: ${SMTPAUTH_EMAIL_HOST}
+      SMTPAUTH_EMAIL_PORT: ${SMTPAUTH_EMAIL_PORT}
+      SMTPAUTH_EMAIL_USER: ${SMTPAUTH_EMAIL_USER}
+      SMTPAUTH_EMAIL_PASS: ${SMTPAUTH_EMAIL_PASS}
+      POSTMARK_SERVER_CLIENT: ${POSTMARK_SERVER_CLIENT}
+      POSTMARK_MESSAGE_STREAM: ${POSTMARK_MESSAGE_STREAM}
+      BASIC_AUTH: ${BASIC_AUTH}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      MICROSOFT_CLIENT_ID: ${MICROSOFT_CLIENT_ID}
+      MICROSOFT_CLIENT_SECRET: ${MICROSOFT_CLIENT_SECRET}
+
   dc_mongo:
     container_name: dc_mongo
     image: mongo:latest
@@ -49,6 +63,8 @@ services:
 
 networks:
   dc_network:
+  nginx_default:
+    external: true
 
 volumes:
   drawing-captcha:
